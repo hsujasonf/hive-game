@@ -1,6 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import { PieceType } from '@/game-logic/types';
+import { PIECE_NAMES, PIECE_DESCRIPTIONS, PIECE_TYPE_COLORS, PIECE_IMAGES } from '@/components/Piece';
+
+const pieces: { type: PieceType; detail: string }[] = [
+  { type: 'queen', detail: 'x1 per player' },
+  { type: 'beetle', detail: 'x2 per player' },
+  { type: 'spider', detail: 'x2 per player' },
+  { type: 'grasshopper', detail: 'x3 per player' },
+  { type: 'ant', detail: 'x3 per player' },
+];
 
 export const HowToPlayDialog = () => {
   const [open, setOpen] = useState(false);
@@ -9,7 +19,7 @@ export const HowToPlayDialog = () => {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="text-2xl font-semibold text-slate-300 hover:text-amber-400 transition-colors cursor-pointer bg-transparent border-none"
+        className="text-2xl font-semibold text-white hover:text-amber-400 transition-colors cursor-pointer bg-transparent border-none text-outline-sm"
       >
         How to Play
       </button>
@@ -20,7 +30,7 @@ export const HowToPlayDialog = () => {
           onClick={() => setOpen(false)}
         >
           <div
-            className="bg-slate-800 border border-slate-600 rounded-2xl p-8 max-w-lg mx-4 shadow-2xl"
+            className="bg-slate-800 border border-slate-600 rounded-2xl p-6 max-w-lg mx-4 shadow-2xl max-h-[85vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-2xl font-bold text-amber-400 mb-4">How to Play</h2>
@@ -43,22 +53,30 @@ export const HowToPlayDialog = () => {
 
               <div>
                 <h3 className="text-white font-semibold mb-2">Pieces</h3>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="bg-slate-700/50 rounded-lg p-2">
-                    <span className="text-amber-400 font-bold">Queen Bee</span> — Moves 1 space
-                  </div>
-                  <div className="bg-slate-700/50 rounded-lg p-2">
-                    <span className="text-purple-400 font-bold">Beetle</span> — Moves 1 space, climbs on top
-                  </div>
-                  <div className="bg-slate-700/50 rounded-lg p-2">
-                    <span className="text-red-400 font-bold">Spider</span> — Exactly 3 spaces along edge
-                  </div>
-                  <div className="bg-slate-700/50 rounded-lg p-2">
-                    <span className="text-green-400 font-bold">Grasshopper</span> — Jumps over pieces in a line
-                  </div>
-                  <div className="bg-slate-700/50 rounded-lg p-2">
-                    <span className="text-blue-400 font-bold">Ant</span> — Any distance along edge
-                  </div>
+                <div className="flex flex-col gap-2">
+                  {pieces.map(({ type, detail }) => {
+                    const typeColor = PIECE_TYPE_COLORS[type];
+                    return (
+                      <div key={type} className="flex items-center gap-3 bg-slate-700/50 rounded-lg p-2">
+                        <div
+                          className="w-10 h-10 rounded-full border-2 overflow-hidden shrink-0"
+                          style={{ borderColor: typeColor.accent, backgroundColor: '#FFF8E7' }}
+                        >
+                          <img
+                            src={PIECE_IMAGES[type]}
+                            alt={PIECE_NAMES[type]}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="font-bold text-xs" style={{ color: typeColor.accent }}>
+                            {PIECE_NAMES[type]} <span className="font-normal text-slate-500">{detail}</span>
+                          </span>
+                          <span className="text-xs text-slate-400">{PIECE_DESCRIPTIONS[type]}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 

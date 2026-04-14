@@ -31,3 +31,27 @@ body {
 .animate-fade-in {
   animation: fade-in 0.2s ease-out forwards;
 }
+
+.text-outline {
+  text-shadow:
+    -2px -2px 0 #000,
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000,
+     0px -2px 0 #000,
+     0px  2px 0 #000,
+    -2px  0px 0 #000,
+     2px  0px 0 #000;
+}
+
+.text-outline-sm {
+  text-shadow:
+    -1px -1px 0 rgba(0,0,0,0.8),
+     1px -1px 0 rgba(0,0,0,0.8),
+    -1px  1px 0 rgba(0,0,0,0.8),
+     1px  1px 0 rgba(0,0,0,0.8),
+     0px -1px 0 rgba(0,0,0,0.8),
+     0px  1px 0 rgba(0,0,0,0.8),
+    -1px  0px 0 rgba(0,0,0,0.8),
+     1px  0px 0 rgba(0,0,0,0.8);
+}

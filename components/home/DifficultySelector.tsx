@@ -12,13 +12,13 @@ const difficulties = [
 
 export const DifficultySelector = ({ onSelect }: DifficultySelectorProps) => (
   <div className="flex flex-col gap-3">
-    <p className="text-sm text-slate-500 uppercase tracking-widest">vs Computer</p>
+    <p className="text-sm text-white uppercase tracking-widest text-outline-sm">vs Computer</p>
     <div className="flex gap-6">
       {difficulties.map(({ key, label }) => (
         <button
           key={key}
           onClick={() => onSelect(key)}
-          className="text-xl font-medium text-slate-400 hover:text-amber-400 transition-colors cursor-pointer bg-transparent border-none"
+          className="text-xl font-medium text-white hover:text-amber-400 transition-colors cursor-pointer bg-transparent border-none text-outline-sm"
         >
           {label}
         </button>
