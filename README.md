@@ -2,6 +2,14 @@
 
 A web-based implementation of the board game **Hive**, built with Next.js, React, and TypeScript. Play against a friend locally or challenge an AI opponent with three difficulty levels.
 
+## Screenshots
+
+### Menu
+![Menu](public/menu.png)
+
+### Game
+![Game](public/game.png)
+
 ## About the Game
 
 Hive is a strategic two-player board game where each player controls a set of insect tiles. The objective is to completely surround your opponent's Queen Bee on all six sides. Pieces are placed on a hexagonal grid and each insect type moves differently.
@@ -85,8 +93,10 @@ components/
     TreeStumpBg.tsx           # Tree stump background SVG
   home/
     HeroTitle.tsx             # Landing page title
+    PlayMenu.tsx              # Expandable play menu (Human/Computer/Difficulty)
+    HowToPlayDialog.tsx       # How to play dialog with piece descriptions
     DifficultySelector.tsx    # AI difficulty buttons
-    HowToPlay.tsx             # How to play section
+    TreeStumpHomeBg.tsx       # Home screen background SVG
 
 game-logic/
   types.ts                    # TypeScript types and interfaces
