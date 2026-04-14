@@ -1,11 +1,11 @@
 'use client';
 
-import { AiDifficulty, GameMode } from '@/lib/types';
+import { AiDifficulty, GameMode } from '@/game-logic/types';
 import { Board } from '@/components/Board';
 import { PieceInventory } from '@/components/PieceInventory';
 import { TurnIndicator } from '@/components/TurnIndicator';
 import { GameOverModal } from '@/components/GameOverModal';
-import { useGameLogic } from './useGameLogic';
+import { useGameLogic } from './use-game-logic';
 
 interface GameClientProps {
   mode: GameMode;

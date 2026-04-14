@@ -1,6 +1,6 @@
 'use client';
 
-import { GameState, GameMode, AiDifficulty } from '@/lib/types';
+import { GameState, GameMode, AiDifficulty } from '@/game-logic/types';
 
 interface TurnIndicatorProps {
   state: GameState;

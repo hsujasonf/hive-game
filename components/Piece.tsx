@@ -1,6 +1,6 @@
 'use client';
 
-import { PieceType, Player } from '@/lib/types';
+import { PieceType, Player } from '@/game-logic/types';
 
 interface PieceProps {
   type: PieceType;

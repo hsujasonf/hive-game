@@ -1,6 +1,6 @@
 'use client';
 
-import { Piece, PieceType, Player } from '@/lib/types';
+import { Piece, PieceType, Player } from '@/game-logic/types';
 import { getPieceColor, PIECE_NAMES, PIECE_DESCRIPTIONS, PIECE_TYPE_COLORS, PIECE_IMAGES } from './Piece';
 
 interface PieceInventoryProps {

@@ -1,9 +1,9 @@
-import { AiDifficulty, GameMode, GameState, HexCoord, Move, Piece } from '@/lib/types';
-import { coordKeyFromHex } from '@/lib/hex';
-import { createInitialState, applyMove } from '@/lib/gameState';
-import { getValidPlacements } from '@/lib/placement';
-import { getMovesForPiece } from '@/lib/movement';
-import { getBestMove } from '@/lib/ai';
+import { AiDifficulty, GameMode, GameState, HexCoord, Move, Piece } from '@/game-logic/types';
+import { coordKeyFromHex } from '@/game-logic/hex';
+import { createInitialState, applyMove } from '@/game-logic/game-state';
+import { getValidPlacements } from '@/game-logic/placement';
+import { getMovesForPiece } from '@/game-logic/movement';
+import { getBestMove } from '@/game-logic/ai';
 
 export interface UIState {
   gameState: GameState;

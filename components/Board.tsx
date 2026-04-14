@@ -1,14 +1,14 @@
 'use client';
 
 import { useRef } from 'react';
-import { GameState, HexCoord, Move, Piece } from '@/lib/types';
-import { coordKeyFromHex, hexToPixel } from '@/lib/hex';
-import { HEX_SIZE } from '@/lib/constants';
+import { GameState, HexCoord, Move, Piece } from '@/game-logic/types';
+import { coordKeyFromHex, hexToPixel } from '@/game-logic/hex';
+import { HEX_SIZE } from '@/game-logic/constants';
 import { HexTile } from './HexTile';
 import { PieceSVG } from './Piece';
-import { usePanZoom } from './board/usePanZoom';
-import { useMoveAnimation } from './board/useMoveAnimation';
-import { useHexesToRender } from './board/useHexesToRender';
+import { usePanZoom } from './board/use-pan-zoom';
+import { useMoveAnimation } from './board/use-move-animation';
+import { useHexesToRender } from './board/use-hexes-to-render';
 import { ZoomControls } from './board/ZoomControls';
 import { TreeStumpBg } from './board/TreeStumpBg';
 

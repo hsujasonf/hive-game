@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Move } from '@/lib/types';
-import { coordKeyFromHex, hexToPixel } from '@/lib/hex';
-import { HEX_SIZE } from '@/lib/constants';
+import { Move } from '@/game-logic/types';
+import { coordKeyFromHex, hexToPixel } from '@/game-logic/hex';
+import { HEX_SIZE } from '@/game-logic/constants';
 
 export interface AnimInfo {
   key: string;

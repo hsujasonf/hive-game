@@ -1,6 +1,6 @@
 import { AiDifficulty, GameState, Move, Player } from './types';
 import { coordKeyFromHex, getNeighbors, hexDistance } from './hex';
-import { getAllValidMoves, applyMove, cloneState } from './gameState';
+import { getAllValidMoves, applyMove, cloneState } from './game-state';
 
 const DEPTH_BY_DIFFICULTY: Record<AiDifficulty, number> = {
   easy: 1,

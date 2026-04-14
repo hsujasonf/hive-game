@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Suspense } from 'react';
 import { GameClient } from './GameClient';
-import { AiDifficulty, GameMode } from '@/lib/types';
+import { AiDifficulty, GameMode } from '@/game-logic/types';
 
 const GameContent = () => {
   const searchParams = useSearchParams();

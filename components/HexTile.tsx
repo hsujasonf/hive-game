@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Player } from '@/lib/types';
-import { HEX_SIZE } from '@/lib/constants';
+import { Player } from '@/game-logic/types';
+import { HEX_SIZE } from '@/game-logic/constants';
 
 interface HexTileProps {
   x: number;

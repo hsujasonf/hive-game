@@ -1,6 +1,6 @@
 import { Board, GameState, HexCoord, Piece } from './types';
 import { coordKeyFromHex, getNeighbors, coordEquals, canSlide, AXIAL_DIRECTIONS } from './hex';
-import { isHiveConnected } from './hiveConnectivity';
+import { isHiveConnected } from './hive-connectivity';
 
 // Check if removing this piece from its position would break the hive
 const wouldBreakHive = (board: Board, coord: HexCoord): boolean => {

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { GameState, HexCoord } from '@/lib/types';
-import { coordKeyFromHex } from '@/lib/hex';
+import { GameState, HexCoord } from '@/game-logic/types';
+import { coordKeyFromHex } from '@/game-logic/hex';
 
 export const useHexesToRender = (board: GameState['board'], validMoves: HexCoord[]) => {
   const validMoveKeys = useMemo(() => new Set(validMoves.map(coordKeyFromHex)), [validMoves]);

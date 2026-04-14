@@ -1,6 +1,6 @@
 'use client';
 
-import { Player } from '@/lib/types';
+import { Player } from '@/game-logic/types';
 
 interface GameOverModalProps {
   winner: Player | 'draw' | null;

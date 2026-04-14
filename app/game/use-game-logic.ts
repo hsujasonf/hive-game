@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useReducer } from 'react';
-import { AiDifficulty, GameMode, HexCoord, Piece } from '@/lib/types';
-import { coordEquals } from '@/lib/hex';
-import { mustPass } from '@/lib/gameState';
-import { getPlaceablePieceTypes } from '@/lib/placement';
-import { QUEEN_DEADLINE } from '@/lib/constants';
-import { gameReducer, createInitialUIState } from './gameReducer';
+import { AiDifficulty, GameMode, HexCoord, Piece } from '@/game-logic/types';
+import { coordEquals } from '@/game-logic/hex';
+import { mustPass } from '@/game-logic/game-state';
+import { getPlaceablePieceTypes } from '@/game-logic/placement';
+import { QUEEN_DEADLINE } from '@/game-logic/constants';
+import { gameReducer, createInitialUIState } from './game-reducer';
 
 export const useGameLogic = (mode: GameMode, difficulty: AiDifficulty) => {
   const [state, dispatch] = useReducer(gameReducer, undefined, () =>
