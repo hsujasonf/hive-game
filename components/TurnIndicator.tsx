@@ -10,7 +10,7 @@ interface TurnIndicatorProps {
   onQuit: () => void;
 }
 
-export function TurnIndicator({ state, mode, difficulty, isAiThinking, onQuit }: TurnIndicatorProps) {
+export const TurnIndicator = ({ state, mode, difficulty, isAiThinking, onQuit }: TurnIndicatorProps) => {
   const { currentPlayer, turnNumber, gameOver, winner } = state;
 
   if (gameOver) {

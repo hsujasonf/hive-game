@@ -8,11 +8,11 @@ const DEPTH_BY_DIFFICULTY: Record<AiDifficulty, number> = {
   hard: 3,
 };
 
-function getOpponent(player: Player): Player {
+const getOpponent = (player: Player): Player => {
   return player === 'white' ? 'black' : 'white';
-}
+};
 
-function findQueen(state: GameState, player: Player): { q: number; r: number } | null {
+const findQueen = (state: GameState, player: Player): { q: number; r: number } | null => {
   for (const [, cell] of state.board) {
     for (const piece of cell.pieces) {
       if (piece.type === 'queen' && piece.owner === player) {
@@ -21,9 +21,9 @@ function findQueen(state: GameState, player: Player): { q: number; r: number } |
     }
   }
   return null;
-}
+};
 
-function countSurrounding(state: GameState, coord: { q: number; r: number }): number {
+const countSurrounding = (state: GameState, coord: { q: number; r: number }): number => {
   const neighbors = getNeighbors(coord);
   let count = 0;
   for (const n of neighbors) {
@@ -31,9 +31,9 @@ function countSurrounding(state: GameState, coord: { q: number; r: number }): nu
     if (cell && cell.pieces.length > 0) count++;
   }
   return count;
-}
+};
 
-function evaluateState(state: GameState, aiPlayer: Player): number {
+const evaluateState = (state: GameState, aiPlayer: Player): number => {
   const opponent = getOpponent(aiPlayer);
   let score = 0;
 
@@ -76,9 +76,9 @@ function evaluateState(state: GameState, aiPlayer: Player): number {
   }
 
   return score;
-}
+};
 
-function countPlayerPieces(state: GameState, player: Player): number {
+const countPlayerPieces = (state: GameState, player: Player): number => {
   let count = 0;
   for (const [, cell] of state.board) {
     for (const piece of cell.pieces) {
@@ -86,16 +86,16 @@ function countPlayerPieces(state: GameState, player: Player): number {
     }
   }
   return count;
-}
+};
 
-function minimax(
+const minimax = (
   state: GameState,
   depth: number,
   alpha: number,
   beta: number,
   aiPlayer: Player,
   maximizing: boolean
-): number {
+): number => {
   if (depth === 0 || state.gameOver) {
     return evaluateState(state, aiPlayer);
   }
@@ -129,9 +129,9 @@ function minimax(
     }
     return minEval;
   }
-}
+};
 
-export function getBestMove(state: GameState, difficulty: AiDifficulty = 'medium'): Move | null {
+export const getBestMove = (state: GameState, difficulty: AiDifficulty = 'medium'): Move | null => {
   const moves = getAllValidMoves(state);
   if (moves.length === 0) return null;
 
@@ -166,4 +166,4 @@ export function getBestMove(state: GameState, difficulty: AiDifficulty = 'medium
   }
 
   return bestMove;
-}
+};

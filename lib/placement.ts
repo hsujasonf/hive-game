@@ -3,7 +3,7 @@ import { coordKeyFromHex, getNeighbors, getAllAdjacentEmpty } from './hex';
 import { QUEEN_DEADLINE } from './constants';
 
 // Get all valid positions where a player can place a new piece
-export function getValidPlacements(state: GameState): HexCoord[] {
+export const getValidPlacements = (state: GameState): HexCoord[] => {
   const player = state.currentPlayer;
   const totalTurns = state.whiteTurns + state.blackTurns;
 
@@ -41,10 +41,10 @@ export function getValidPlacements(state: GameState): HexCoord[] {
 
     return touchesFriendly && !touchesEnemy;
   });
-}
+};
 
 // Get which piece types the current player can place
-export function getPlaceablePieceTypes(state: GameState): PieceType[] {
+export const getPlaceablePieceTypes = (state: GameState): PieceType[] => {
   const player = state.currentPlayer;
   const playerTurns = player === 'white' ? state.whiteTurns : state.blackTurns;
   const queenPlaced = state.queenPlaced[player];
@@ -65,4 +65,4 @@ export function getPlaceablePieceTypes(state: GameState): PieceType[] {
   }
 
   return Array.from(availableTypes);
-}
+};

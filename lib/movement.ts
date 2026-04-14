@@ -3,22 +3,22 @@ import { coordKeyFromHex, getNeighbors, coordEquals, canSlide, AXIAL_DIRECTIONS 
 import { isHiveConnected } from './hiveConnectivity';
 
 // Check if removing this piece from its position would break the hive
-function wouldBreakHive(board: Board, coord: HexCoord): boolean {
+const wouldBreakHive = (board: Board, coord: HexCoord): boolean => {
   const cell = board.get(coordKeyFromHex(coord));
   if (!cell) return false;
   // If there's a stack, removing the top piece doesn't affect connectivity
   if (cell.pieces.length > 1) return false;
   return !isHiveConnected(board, coord);
-}
+};
 
 // Check if a hex is occupied at ground level (has pieces)
-function isOccupied(board: Board, coord: HexCoord): boolean {
+const isOccupied = (board: Board, coord: HexCoord): boolean => {
   const cell = board.get(coordKeyFromHex(coord));
   return !!cell && cell.pieces.length > 0;
-}
+};
 
 // Check that after moving, the piece remains adjacent to at least one other piece
-function touchesHive(board: Board, from: HexCoord, to: HexCoord): boolean {
+const touchesHive = (board: Board, from: HexCoord, to: HexCoord): boolean => {
   const neighbors = getNeighbors(to);
   return neighbors.some(n => {
     if (coordEquals(n, from)) {
@@ -28,10 +28,10 @@ function touchesHive(board: Board, from: HexCoord, to: HexCoord): boolean {
     }
     return isOccupied(board, n);
   });
-}
+};
 
 // Queen: moves exactly 1 space, must slide, must not break hive
-export function getQueenMoves(state: GameState, coord: HexCoord): HexCoord[] {
+export const getQueenMoves = (state: GameState, coord: HexCoord): HexCoord[] => {
   const { board } = state;
   if (wouldBreakHive(board, coord)) return [];
 
@@ -41,10 +41,10 @@ export function getQueenMoves(state: GameState, coord: HexCoord): HexCoord[] {
     if (!touchesHive(board, coord, n)) return false;
     return true;
   });
-}
+};
 
 // Beetle: moves exactly 1 space, CAN climb on top of other pieces
-export function getBeetleMoves(state: GameState, coord: HexCoord): HexCoord[] {
+export const getBeetleMoves = (state: GameState, coord: HexCoord): HexCoord[] => {
   const { board } = state;
   const cell = board.get(coordKeyFromHex(coord));
   if (!cell) return [];
@@ -71,17 +71,17 @@ export function getBeetleMoves(state: GameState, coord: HexCoord): HexCoord[] {
     // Can always climb onto an occupied hex from ground level
     return true;
   });
-}
+};
 
 // Spider: moves exactly 3 spaces around the hive perimeter, no backtracking
-export function getSpiderMoves(state: GameState, coord: HexCoord): HexCoord[] {
+export const getSpiderMoves = (state: GameState, coord: HexCoord): HexCoord[] => {
   const { board } = state;
   if (wouldBreakHive(board, coord)) return [];
 
   const results = new Set<string>();
 
   // DFS with exactly 3 steps
-  function dfs(current: HexCoord, steps: number, visited: Set<string>) {
+  const dfs = (current: HexCoord, steps: number, visited: Set<string>) => {
     if (steps === 3) {
       results.add(coordKeyFromHex(current));
       return;
@@ -121,7 +121,7 @@ export function getSpiderMoves(state: GameState, coord: HexCoord): HexCoord[] {
       dfs(neighbor, steps + 1, visited);
       visited.delete(nKey);
     }
-  }
+  };
 
   const visited = new Set<string>();
   visited.add(coordKeyFromHex(coord));
@@ -134,10 +134,10 @@ export function getSpiderMoves(state: GameState, coord: HexCoord): HexCoord[] {
     const [q, r] = k.split(',').map(Number);
     return { q, r };
   });
-}
+};
 
 // Grasshopper: jumps in a straight line over at least one piece
-export function getGrasshopperMoves(state: GameState, coord: HexCoord): HexCoord[] {
+export const getGrasshopperMoves = (state: GameState, coord: HexCoord): HexCoord[] => {
   const { board } = state;
   if (wouldBreakHive(board, coord)) return [];
 
@@ -157,10 +157,10 @@ export function getGrasshopperMoves(state: GameState, coord: HexCoord): HexCoord
   }
 
   return moves;
-}
+};
 
 // Ant: moves any number of spaces around the hive perimeter
-export function getAntMoves(state: GameState, coord: HexCoord): HexCoord[] {
+export const getAntMoves = (state: GameState, coord: HexCoord): HexCoord[] => {
   const { board } = state;
   if (wouldBreakHive(board, coord)) return [];
 
@@ -203,10 +203,10 @@ export function getAntMoves(state: GameState, coord: HexCoord): HexCoord[] {
     const [q, r] = k.split(',').map(Number);
     return { q, r };
   });
-}
+};
 
 // Get all valid moves for a specific piece on the board
-export function getMovesForPiece(state: GameState, piece: Piece, coord: HexCoord): HexCoord[] {
+export const getMovesForPiece = (state: GameState, piece: Piece, coord: HexCoord): HexCoord[] => {
   // Can't move pieces until queen is placed
   if (!state.queenPlaced[piece.owner]) return [];
 
@@ -224,4 +224,4 @@ export function getMovesForPiece(state: GameState, piece: Piece, coord: HexCoord
     case 'ant': return getAntMoves(state, coord);
     default: return [];
   }
-}
+};

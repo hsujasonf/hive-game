@@ -4,7 +4,7 @@ import { PIECE_COUNTS } from './constants';
 import { getValidPlacements, getPlaceablePieceTypes } from './placement';
 import { getMovesForPiece } from './movement';
 
-function createPieces(owner: Player): Piece[] {
+const createPieces = (owner: Player): Piece[] => {
   const pieces: Piece[] = [];
   for (const [type, count] of Object.entries(PIECE_COUNTS)) {
     for (let i = 0; i < count; i++) {
@@ -16,9 +16,9 @@ function createPieces(owner: Player): Piece[] {
     }
   }
   return pieces;
-}
+};
 
-export function createInitialState(): GameState {
+export const createInitialState = (): GameState => {
   return {
     board: new Map(),
     currentPlayer: 'white',
@@ -33,9 +33,9 @@ export function createInitialState(): GameState {
     gameOver: false,
     winner: null,
   };
-}
+};
 
-export function cloneBoard(board: Board): Board {
+export const cloneBoard = (board: Board): Board => {
   const newBoard = new Map<string, BoardCell>();
   for (const [key, cell] of board) {
     newBoard.set(key, {
@@ -44,9 +44,9 @@ export function cloneBoard(board: Board): Board {
     });
   }
   return newBoard;
-}
+};
 
-export function cloneState(state: GameState): GameState {
+export const cloneState = (state: GameState): GameState => {
   return {
     board: cloneBoard(state.board),
     currentPlayer: state.currentPlayer,
@@ -61,9 +61,9 @@ export function cloneState(state: GameState): GameState {
     gameOver: state.gameOver,
     winner: state.winner,
   };
-}
+};
 
-export function applyMove(state: GameState, move: Move): GameState {
+export const applyMove = (state: GameState, move: Move): GameState => {
   const newState = cloneState(state);
   const { board } = newState;
 
@@ -126,9 +126,9 @@ export function applyMove(state: GameState, move: Move): GameState {
   newState.winner = winCheck.winner;
 
   return newState;
-}
+};
 
-export function isQueenSurrounded(board: Board, player: Player): boolean {
+export const isQueenSurrounded = (board: Board, player: Player): boolean => {
   for (const [, cell] of board) {
     const topPiece = cell.pieces[cell.pieces.length - 1];
     if (topPiece.type === 'queen' && topPiece.owner === player) {
@@ -140,9 +140,9 @@ export function isQueenSurrounded(board: Board, player: Player): boolean {
     }
   }
   return false;
-}
+};
 
-export function checkWinCondition(state: GameState): { gameOver: boolean; winner: Player | 'draw' | null } {
+export const checkWinCondition = (state: GameState): { gameOver: boolean; winner: Player | 'draw' | null } => {
   const whiteSurrounded = isQueenSurrounded(state.board, 'white');
   const blackSurrounded = isQueenSurrounded(state.board, 'black');
 
@@ -156,10 +156,10 @@ export function checkWinCondition(state: GameState): { gameOver: boolean; winner
     return { gameOver: true, winner: 'white' };
   }
   return { gameOver: false, winner: null };
-}
+};
 
 // Get all legal moves for the current player
-export function getAllValidMoves(state: GameState): Move[] {
+export const getAllValidMoves = (state: GameState): Move[] => {
   const player = state.currentPlayer;
   const moves: Move[] = [];
 
@@ -193,9 +193,9 @@ export function getAllValidMoves(state: GameState): Move[] {
   }
 
   return moves;
-}
+};
 
 // Check if current player must pass (no legal moves)
-export function mustPass(state: GameState): boolean {
+export const mustPass = (state: GameState): boolean => {
   return getAllValidMoves(state).length === 0;
-}
+};

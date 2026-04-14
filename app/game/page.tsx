@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 import { GameClient } from './GameClient';
 import { AiDifficulty, GameMode } from '@/lib/types';
 
-function GameContent() {
+const GameContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const mode = (searchParams.get('mode') as GameMode) || 'hvh';
@@ -18,12 +18,12 @@ function GameContent() {
       onMainMenu={() => router.push('/')}
     />
   );
-}
+};
 
-export default function GamePage() {
-  return (
-    <Suspense fallback={<div className="h-screen flex items-center justify-center bg-slate-950 text-white">Loading...</div>}>
-      <GameContent />
-    </Suspense>
-  );
-}
+const GamePage = () => (
+  <Suspense fallback={<div className="h-screen flex items-center justify-center bg-slate-950 text-white">Loading...</div>}>
+    <GameContent />
+  </Suspense>
+);
+
+export default GamePage;

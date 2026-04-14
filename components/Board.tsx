@@ -1,82 +1,38 @@
 'use client';
 
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { GameState, HexCoord, Piece } from '@/lib/types';
+import { useRef } from 'react';
+import { GameState, HexCoord, Move, Piece } from '@/lib/types';
 import { coordKeyFromHex, hexToPixel } from '@/lib/hex';
 import { HEX_SIZE } from '@/lib/constants';
 import { HexTile } from './HexTile';
 import { PieceSVG } from './Piece';
+import { usePanZoom } from './board/usePanZoom';
+import { useMoveAnimation } from './board/useMoveAnimation';
+import { useHexesToRender } from './board/useHexesToRender';
+import { ZoomControls } from './board/ZoomControls';
+import { TreeStumpBg } from './board/TreeStumpBg';
 
 interface BoardProps {
   state: GameState;
   selectedPiece: { piece: Piece; coord?: HexCoord } | null;
   validMoves: HexCoord[];
+  lastMove: Move | null;
   onHexClick: (coord: HexCoord) => void;
   onBoardPieceClick: (coord: HexCoord) => void;
 }
 
-// Fixed table: centered at origin, only grows when occupied pieces reach the edge
-const INITIAL_HALF = HEX_SIZE * 7.5; // comfortable starting view
+const INITIAL_HALF = HEX_SIZE * 7.5;
+const ANIM_DURATION = 350;
 
-export function Board({ state, selectedPiece, validMoves, onHexClick, onBoardPieceClick }: BoardProps) {
+export const Board = ({ state, selectedPiece, validMoves, lastMove, onHexClick, onBoardPieceClick }: BoardProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [dragging, setDragging] = useState(false);
-  const dragStart = useRef({ x: 0, y: 0, panX: 0, panY: 0 });
-
-  // Fixed table size — user controls zoom/pan manually
-  const tableHalf = INITIAL_HALF;
-
-  const validMoveKeys = useMemo(() => {
-    return new Set(validMoves.map(coordKeyFromHex));
-  }, [validMoves]);
-
-  // Only render occupied hexes + valid move targets
-  const hexesToRender = useMemo(() => {
-    const hexMap = new Map<string, { coord: HexCoord; occupied: boolean }>();
-
-    for (const [key, cell] of state.board) {
-      hexMap.set(key, { coord: cell.coord, occupied: true });
-    }
-
-    for (const coord of validMoves) {
-      const key = coordKeyFromHex(coord);
-      if (!hexMap.has(key)) {
-        hexMap.set(key, { coord, occupied: false });
-      }
-    }
-
-    if (state.board.size === 0 && validMoves.length === 0) {
-      hexMap.set(coordKeyFromHex({ q: 0, r: 0 }), { coord: { q: 0, r: 0 }, occupied: false });
-    }
-
-    return hexMap;
-  }, [state.board, validMoves]);
-
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (e.button !== 0) return;
-    if ((e.target as Element).tagName === 'svg' || (e.target as Element).classList.contains('board-bg')) {
-      setDragging(true);
-      dragStart.current = { x: e.clientX, y: e.clientY, panX: pan.x, panY: pan.y };
-    }
-  }, [pan]);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!dragging) return;
-    const dx = e.clientX - dragStart.current.x;
-    const dy = e.clientY - dragStart.current.y;
-    setPan({ x: dragStart.current.panX + dx / zoom, y: dragStart.current.panY + dy / zoom });
-  }, [dragging, zoom]);
-
-  const handleMouseUp = useCallback(() => {
-    setDragging(false);
-  }, []);
+  const { pan, zoom, handleMouseDown, handleMouseMove, handleMouseUp, zoomIn, zoomOut, resetView } = usePanZoom();
+  const animInfo = useMoveAnimation(lastMove, state.turnNumber, ANIM_DURATION);
+  const { hexMap, validMoveKeys } = useHexesToRender(state.board, validMoves);
 
   const selectedCoordKey = selectedPiece?.coord ? coordKeyFromHex(selectedPiece.coord) : null;
 
-  // ViewBox: centered at origin, sized by tableHalf, adjusted by pan/zoom
-  const half = tableHalf;
+  const half = INITIAL_HALF;
   const finalVB = {
     x: -half - pan.x,
     y: -half - pan.y,
@@ -85,16 +41,16 @@ export function Board({ state, selectedPiece, validMoves, onHexClick, onBoardPie
   };
 
   return (
-    <div className="absolute inset-0 overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800">
+    <div className="absolute inset-0 overflow-hidden">
+      <TreeStumpBg />
       <svg
         ref={svgRef}
-        className="w-full h-full"
+        className="absolute inset-0 z-10 w-full h-full"
         viewBox={`${finalVB.x} ${finalVB.y} ${finalVB.width} ${finalVB.height}`}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        style={{ width: '100%', height: '100%' }}
       >
         <rect
           className="board-bg"
@@ -104,28 +60,31 @@ export function Board({ state, selectedPiece, validMoves, onHexClick, onBoardPie
           height={finalVB.height + 4000}
           fill="transparent"
         />
-        {Array.from(hexesToRender).map(([key, { coord, occupied }]) => {
+        {Array.from(hexMap).map(([key, { coord, occupied }]) => {
           const { x, y } = hexToPixel(coord, HEX_SIZE);
           const isSelected = key === selectedCoordKey;
           const isValidTarget = validMoveKeys.has(key);
           const cell = state.board.get(key);
           const topPiece = cell?.pieces[cell.pieces.length - 1];
 
+          const anim = animInfo && animInfo.key === key
+            ? { x: animInfo.fromX, y: animInfo.fromY, type: animInfo.type as 'slide' | 'drop' | 'jump', id: animInfo.turnId }
+            : undefined;
+
           return (
             <HexTile
-              key={key}
+              key={anim ? `${key}-anim-${anim.id}` : key}
               x={x}
               y={y}
               isSelected={isSelected}
               isValidTarget={isValidTarget}
               isOccupied={occupied}
               owner={topPiece?.owner}
+              animateFrom={anim}
+              animDuration={ANIM_DURATION}
               onClick={() => {
-                if (isValidTarget) {
-                  onHexClick(coord);
-                } else if (occupied) {
-                  onBoardPieceClick(coord);
-                }
+                if (isValidTarget) onHexClick(coord);
+                else if (occupied) onBoardPieceClick(coord);
               }}
             >
               {topPiece && (
@@ -139,26 +98,7 @@ export function Board({ state, selectedPiece, validMoves, onHexClick, onBoardPie
           );
         })}
       </svg>
-      <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1">
-        <button
-          onClick={() => setZoom(z => Math.max(0.3, z * 0.8))}
-          className="w-8 h-8 flex items-center justify-center rounded bg-slate-700/80 hover:bg-slate-600 text-slate-200 text-lg font-bold cursor-pointer transition-colors"
-        >
-          -
-        </button>
-        <button
-          onClick={() => { setZoom(1); setPan({ x: 0, y: 0 }); }}
-          className="h-8 px-2 flex items-center justify-center rounded bg-slate-700/80 hover:bg-slate-600 text-slate-300 text-xs font-medium cursor-pointer transition-colors min-w-[48px]"
-        >
-          {Math.round(zoom * 100)}%
-        </button>
-        <button
-          onClick={() => setZoom(z => Math.min(3, z * 1.25))}
-          className="w-8 h-8 flex items-center justify-center rounded bg-slate-700/80 hover:bg-slate-600 text-slate-200 text-lg font-bold cursor-pointer transition-colors"
-        >
-          +
-        </button>
-      </div>
+      <ZoomControls zoom={zoom} onZoomIn={zoomIn} onZoomOut={zoomOut} onReset={resetView} />
     </div>
   );
-}
+};

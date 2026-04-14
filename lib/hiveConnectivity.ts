@@ -3,7 +3,7 @@ import { coordKeyFromHex, getNeighbors } from './hex';
 
 // Check if the hive remains a single connected component.
 // If excludeCoord is provided, that position is treated as empty (for checking if a piece can move).
-export function isHiveConnected(board: Board, excludeCoord?: HexCoord): boolean {
+export const isHiveConnected = (board: Board, excludeCoord?: HexCoord): boolean => {
   const excludeKey = excludeCoord ? coordKeyFromHex(excludeCoord) : null;
 
   // Collect all occupied keys (excluding the removed piece)
@@ -46,4 +46,4 @@ export function isHiveConnected(board: Board, excludeCoord?: HexCoord): boolean 
   }
 
   return visited.size === occupiedKeys.length;
-}
+};

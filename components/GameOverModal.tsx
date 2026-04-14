@@ -8,7 +8,7 @@ interface GameOverModalProps {
   onMainMenu: () => void;
 }
 
-export function GameOverModal({ winner, onPlayAgain, onMainMenu }: GameOverModalProps) {
+export const GameOverModal = ({ winner, onPlayAgain, onMainMenu }: GameOverModalProps) => {
   if (!winner) return null;
 
   return (

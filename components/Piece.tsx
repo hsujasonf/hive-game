@@ -50,14 +50,14 @@ const PIECE_TYPE_COLORS: Record<PieceType, { accent: string; accentDark: string 
   ant:         { accent: '#3B82F6', accentDark: '#2563EB' },
 };
 
-export function getPieceColor(owner: Player): { fill: string; stroke: string; text: string } {
+export const getPieceColor = (owner: Player): { fill: string; stroke: string; text: string } => {
   if (owner === 'white') {
     return { fill: '#FFF8E7', stroke: '#8B7355', text: '#5C4033' };
   }
   return { fill: '#2C2C2C', stroke: '#555555', text: '#E8E8E8' };
 }
 
-export function PieceSVG({ type, owner, size = 28, stackCount }: PieceProps) {
+export const PieceSVG = ({ type, owner, size = 28, stackCount }: PieceProps) => {
   const { stroke } = getPieceColor(owner);
   const typeColor = PIECE_TYPE_COLORS[type];
   const imgSize = size * 0.9;

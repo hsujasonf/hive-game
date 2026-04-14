@@ -13,7 +13,7 @@ interface PieceInventoryProps {
   mustPlaceQueen: boolean;
 }
 
-export function PieceInventory({
+export const PieceInventory = ({
   player,
   pieces,
   isCurrentTurn,
@@ -21,7 +21,7 @@ export function PieceInventory({
   selectedPieceId,
   onSelectPiece,
   mustPlaceQueen,
-}: PieceInventoryProps) {
+}: PieceInventoryProps) => {
   const grouped: Record<PieceType, Piece[]> = {
     queen: [],
     beetle: [],
